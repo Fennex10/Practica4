@@ -1,4 +1,4 @@
-name: Hola Mundo + Notificación Detallada
+name: Hola Mundo + Notificación Profesional
 
 on:
   push:
@@ -8,27 +8,36 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    name: Ejecutar Hola Mundo y Notificar
 
     steps:
-      - name: Descargar código
+      # 1️⃣ Descargar el código del repositorio
+      - name: Checkout del código
         uses: actions/checkout@v3
 
+      # 2️⃣ Configurar Node.js (GitHub Actions lo instala automáticamente)
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Ejecutar Hola Mundo
-        run: node index.js
-
-      - name: Enviar notificación detallada a ntfy.sh
+      # 3️⃣ Mostrar contenido de index.js
+      - name: Mostrar contenido de index.js
         run: |
-          curl -d "🚀 Build Completado con Éxito
-Repositorio: $GITHUB_REPOSITORY
-Rama: $GITHUB_REF
-Commit: $GITHUB_SHA
-Autor: $GITHUB_ACTOR
-Mensaje: $GITHUB_EVENT_HEAD_COMMIT_MESSAGE
+          echo "📄 Contenido de index.js:"
+          echo "------------------------"
+          cat index.js
+          echo "------------------------"
 
-El programa Hola Mundo se ejecutó correctamente y la integración continua funciona perfectamente!" \
-          https://ntfy.sh/devops-itla
+      # 4️⃣ Ejecutar Hola Mundo
+      - name: Ejecutar Hola Mundo
+        run: |
+          echo "🚀 Ejecutando index.js..."
+          node index.js
+
+      # 5️⃣ Enviar notificación a ntfy.sh
+      - name: Enviar notificación
+        run: |
+          OUTPUT=$(node index.js)
+          curl -d "✅ Se ejecutó Hola Mundo en $GITHUB_REPOSITORY (rama main). Salida: $OUTPUT" \
+               https://ntfy.sh/devops-itla
