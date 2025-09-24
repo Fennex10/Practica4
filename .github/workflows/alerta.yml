@@ -1,0 +1,18 @@
+name: Enviar notificación a ntfy.sh
+
+on:
+  push:                # Evento que dispara el workflow
+    branches:
+      - main           # Solo cuando hay un push en la rama main
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest   # GitHub usará una máquina Linux
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v3   # Baja tu repo a la máquina
+
+      - name: Enviar notificación a ntfy.sh
+        run: |
+          curl -d "🚀 Nuevo push en la rama main del repositorio $GITHUB_REPOSITORY" \
+               https://ntfy.sh/devops-itla
