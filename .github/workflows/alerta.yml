@@ -1,18 +1,34 @@
-name: Enviar notificación a ntfy.sh
+name: Hola Mundo + Notificación Detallada
 
 on:
-  push:                # Evento que dispara el workflow
+  push:
     branches:
-      - main           # Solo cuando hay un push en la rama main
+      - main
 
 jobs:
-  notify:
-    runs-on: ubuntu-latest   # GitHub usará una máquina Linux
+  build:
+    runs-on: ubuntu-latest
+
     steps:
       - name: Descargar código
-        uses: actions/checkout@v3   # Baja tu repo a la máquina
+        uses: actions/checkout@v3
 
-      - name: Enviar notificación a ntfy.sh
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Ejecutar Hola Mundo
+        run: node index.js
+
+      - name: Enviar notificación detallada a ntfy.sh
         run: |
-          curl -d "🚀 Nuevo push en la rama main del repositorio $GITHUB_REPOSITORY" \
-               https://ntfy.sh/devops-itla
+          curl -d "🚀 Build Completado con Éxito
+Repositorio: $GITHUB_REPOSITORY
+Rama: $GITHUB_REF
+Commit: $GITHUB_SHA
+Autor: $GITHUB_ACTOR
+Mensaje: $GITHUB_EVENT_HEAD_COMMIT_MESSAGE
+
+El programa Hola Mundo se ejecutó correctamente y la integración continua funciona perfectamente!" \
+          https://ntfy.sh/devops-itla
